@@ -1,7 +1,7 @@
 {
-    "host": "localhost",
+    "host": "center.cphggvxo7yic.us-east-2.rds.amazonaws.com",
     "port": "3306",
-    "user": "root",
-    "passwd": "12345",
-    "database": "sensores"
+    "user": "admin",
+    "passwd": "753862mau",
+    "database": "sensors_demo"
 }

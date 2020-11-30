@@ -38,9 +38,9 @@ def login():
         return jsonify({"error": "Método não aceito!"}) 
 
 
-@app.route("/steam", methods=['GET','POST','PUT']) 
+@app.route("/temperature", methods=['GET','POST']) 
 @cross_origin(origin='*',headers=['Content- Type','Authorization'])
-def steam(): 
+def temperature(): 
     #recupera itens de json enviados por post
     body = request.get_json()
     #recupera a key hascode enviada por get
@@ -54,8 +54,7 @@ def steam():
     if request.method == 'GET':
         try:
             db = MySql()
-            # SELECT na tabela de Sensor de vapor
-            query = db.select('steam_sensor')
+            query = db.select('temperature')
             return jsonify(query)
         except:
             jsonify({"error": "Erro de requisição!"})
@@ -65,9 +64,76 @@ def steam():
         try:
             db = MySql()
             body['dtupdate'] = str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-            # INSERT retorna ID do item inserido na tabela sensor de vapor
-            id = db.insert('steam_sensor', body)
-            query = db.select('steam_sensor', where='id="%s"' % str(id))
+            id = db.insert('temperature', body)
+            query = db.select('temperature', where='id="%s"' % str(id), first= True)
+            return jsonify(query)
+        except:
+            return jsonify({"error": "Erro de requisição!"})
+    else:
+        return jsonify({"error": 'Método não implementado!'})
+    
+@app.route("/motor", methods=['GET','POST']) 
+@cross_origin(origin='*',headers=['Content- Type','Authorization'])
+def motor(): 
+    #recupera itens de json enviados por post
+    body = request.get_json()
+    #recupera a key hascode enviada por get
+    hascode = request.args.get('hascode')
+    
+    # Verificação se o usuário está logado
+    if(not Validator().checkHash(hascode)):
+        return jsonify({"error": "Usuário sem permissão de acesso!"})
+    
+    # Implementação do método GET
+    if request.method == 'GET':
+        try:
+            db = MySql()
+            query = db.select('motor')
+            return jsonify(query)
+        except:
+            jsonify({"error": "Erro de requisição!"})
+            
+    # Implementação do método POST
+    elif request.method == 'POST':
+        try:
+            db = MySql()
+            body['dtupdate'] = str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            id = db.insert('motor', body)
+            query = db.select('motor', where='id="%s"' % str(id), first= True)
+            return jsonify(query)
+        except:
+            return jsonify({"error": "Erro de requisição!"})
+    else:
+        return jsonify({"error": 'Método não implementado!'})
+
+@app.route("/microswitch", methods=['GET','POST']) 
+@cross_origin(origin='*',headers=['Content- Type','Authorization'])
+def microswitch(): 
+    #recupera itens de json enviados por post
+    body = request.get_json()
+    #recupera a key hascode enviada por get
+    hascode = request.args.get('hascode')
+    
+    # Verificação se o usuário está logado
+    if(not Validator().checkHash(hascode)):
+        return jsonify({"error": "Usuário sem permissão de acesso!"})
+    
+    # Implementação do método GET
+    if request.method == 'GET':
+        try:
+            db = MySql()
+            query = db.select('microswitch')
+            return jsonify(query)
+        except:
+            jsonify({"error": "Erro de requisição!"})
+            
+    # Implementação do método POST
+    elif request.method == 'POST':
+        try:
+            db = MySql()
+            body['dtupdate'] = str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            id = db.insert('microswitch', body)
+            query = db.select('microswitch', where='id="%s"' % str(id), first= True)
             return jsonify(query)
         except:
             return jsonify({"error": "Erro de requisição!"})
